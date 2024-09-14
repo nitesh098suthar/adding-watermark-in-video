@@ -18,16 +18,13 @@ export async function POST() {
     const escapePath = (filePath: string) =>
       `"${filePath.replace(/"/g, '\\"')}"`;
 
-    // const ffmpegCommand = `ffmpeg -i ${escapePath(inputVideo)} -i ${escapePath(
-    //   inputImage
-    // )} -filter_complex "[1:v]scale=100:100[watermark];[0:v][watermark]overlay=12:12" -c:a copy ${escapePath(
-    //   outputPath
-    // )}`;
     const ffmpegCommand = `ffmpeg -i ${escapePath(inputVideo)} -i ${escapePath(
       inputImage
     )} -filter_complex "[1:v]scale=100:100[watermark];[0:v][watermark]overlay=12:12,drawtext=fontfile=${escapePath(
       "public/Roboto-Regular.ttf"
-    )}:text='Sumo Bot':fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2" -c:a copy ${escapePath(
+    )}:text='Stack Overflow':fontcolor=white:fontsize=24:x=10:y=h-text_h-10,drawtext=fontfile=${escapePath(
+      "public/Roboto-Regular.ttf"
+    )}:text='mobileno':fontcolor=white:fontsize=24:x=w-text_w-10:y=h-text_h-10" -c:a copy ${escapePath(
       outputPath
     )}`;
 
