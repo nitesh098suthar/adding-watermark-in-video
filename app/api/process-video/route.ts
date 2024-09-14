@@ -13,16 +13,25 @@ export async function POST() {
     const inputVideo = path.join(process.cwd(), "public", "video.mp4");
     const inputImage = path.join(process.cwd(), "public", "image.png");
     const outputPath = path.join(process.cwd(), "public", `${timeAndDate}.mp4`);
-
+    const heightOfScreen = 680;
     // Escape the paths for use in the command
     const escapePath = (filePath: string) =>
       `"${filePath.replace(/"/g, '\\"')}"`;
 
+    // const ffmpegCommand = `ffmpeg -i ${escapePath(inputVideo)} -i ${escapePath(
+    //   inputImage
+    // )} -filter_complex "[1:v]scale=100:100[watermark];[0:v][watermark]overlay=12:12,drawbox=x=0:y=h-60:w=iw:h=60:color=black@0.5:t=fill,drawtext=fontfile=${escapePath(
+    //   "public/Roboto-Regular.ttf"
+    // )}:text='+91 7300112706':fontcolor=white:fontsize=24:x=10:y=h-text_h-10:box=1:boxcolor=black@0.5:boxborderw=0,drawtext=fontfile=${escapePath(
+    //   "public/Roboto-Regular.ttf"
+    // )}:text='nitesh098suthar@gmail.com':fontcolor=white:fontsize=24:x=w-text_w-10:y=h-text_h-10:box=1:boxcolor=black@0.5:boxborderw=0" -c:a copy ${escapePath(
+    //   outputPath
+    // )}`;
     const ffmpegCommand = `ffmpeg -i ${escapePath(inputVideo)} -i ${escapePath(
       inputImage
-    )} -filter_complex "[1:v]scale=100:100[watermark];[0:v][watermark]overlay=12:12,drawtext=fontfile=${escapePath(
+    )} -filter_complex "[1:v]scale=100:100[watermark];[0:v][watermark]overlay=12:12,drawbox=x=0:y=${heightOfScreen}:w=iw:h=60:color=black@0.5:t=fill,drawtext=fontfile=${escapePath(
       "public/Roboto-Regular.ttf"
-    )}:text='Stack Overflow':fontcolor=white:fontsize=24:x=10:y=h-text_h-10,drawtext=fontfile=${escapePath(
+    )}:text='Stack Overflow':fontcolor=white:fontsize=24:x=10:y=h-text_h-10:,drawtext=fontfile=${escapePath(
       "public/Roboto-Regular.ttf"
     )}:text='mobileno':fontcolor=white:fontsize=24:x=w-text_w-10:y=h-text_h-10" -c:a copy ${escapePath(
       outputPath
@@ -30,7 +39,7 @@ export async function POST() {
 
     console.log("Executing command:", ffmpegCommand);
 
-    const { stdout, stderr } = await execPromise(ffmpegCommand);
+    const { stderr } = await execPromise(ffmpegCommand);
 
     if (stderr) {
       console.error("FFmpeg stderr:", stderr);
